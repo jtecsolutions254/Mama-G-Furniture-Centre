@@ -8,8 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, LogOut, Upload, X } from "lucide-react";
+import { Pencil, Trash2, Plus, LogOut, Upload, X, Package, ShoppingBag } from "lucide-react";
 import { formatKsh } from "@/lib/constants";
+import AdminOrders from "@/components/AdminOrders";
 
 type Row = {
   id: string;
