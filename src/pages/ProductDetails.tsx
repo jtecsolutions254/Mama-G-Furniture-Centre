@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ChevronLeft, MessageCircle, Ruler, Layers } from "lucide-react";
+import { ChevronLeft, MessageCircle, Ruler, Layers, ShoppingBag } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import DeliveryCalculator from "@/components/DeliveryCalculator";
+import ProductReviews, { Stars } from "@/components/ProductReviews";
 import { useProduct, resolveImage } from "@/hooks/useProducts";
 import { BUSINESS, formatKsh, whatsappLink } from "@/lib/constants";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function ProductDetails() {
   const { slug } = useParams();
