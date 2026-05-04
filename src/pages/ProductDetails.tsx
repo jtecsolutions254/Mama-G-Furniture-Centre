@@ -124,20 +124,29 @@ export default function ProductDetails() {
               <DeliveryCalculator />
             </div>
 
-            <a
-              href={whatsappLink(message)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 w-full inline-flex items-center justify-center gap-2 bg-whatsapp text-whatsapp-foreground px-7 py-4 font-medium hover:opacity-90 transition-smooth rounded-sm shadow-elegant"
-            >
-              <MessageCircle className="w-5 h-5" />
-              Order via WhatsApp
-            </a>
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Link
+                to={`/checkout/${product.slug}`}
+                className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-4 font-medium hover:bg-accent hover:text-accent-foreground transition-smooth rounded-sm shadow-elegant"
+              >
+                <ShoppingBag className="w-5 h-5" /> Place Order
+              </Link>
+              <a
+                href={whatsappLink(message)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-whatsapp text-whatsapp-foreground px-6 py-4 font-medium hover:opacity-90 transition-smooth rounded-sm"
+              >
+                <MessageCircle className="w-5 h-5" /> WhatsApp
+              </a>
+            </div>
             <p className="text-xs text-muted-foreground mt-3 text-center">
-              Pre-filled message will open in WhatsApp · Pay via M-Pesa on delivery
+              Pay via M-Pesa or cash on delivery · Track your order anytime
             </p>
           </div>
         </div>
+
+        {product.id.length === 36 && <ProductReviews productId={product.id} />}
       </main>
 
       <SiteFooter />
