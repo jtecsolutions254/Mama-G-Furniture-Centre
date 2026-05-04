@@ -8,8 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, LogOut, Upload, X } from "lucide-react";
+import { Pencil, Trash2, Plus, LogOut, Upload, X, Package, ShoppingBag } from "lucide-react";
 import { formatKsh } from "@/lib/constants";
+import AdminOrders from "@/components/AdminOrders";
 
 type Row = {
   id: string;
@@ -49,6 +50,7 @@ export default function Admin() {
   const [session, setSession] = useState<unknown>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [checking, setChecking] = useState(true);
+  const [tab, setTab] = useState<"products" | "orders">("products");
   const [rows, setRows] = useState<Row[]>([]);
   const [editing, setEditing] = useState<Partial<Row> | null>(null);
   const [saving, setSaving] = useState(false);
@@ -197,38 +199,59 @@ VALUES ('${(session as { user: { id: string } } | null)?.user?.id ?? "USER_ID"}'
           </div>
         </div>
 
-        <button onClick={() => setEditing({ ...empty })} className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-sm hover:bg-accent hover:text-accent-foreground transition-smooth mb-6">
-          <Plus className="w-4 h-4" /> Add product
-        </button>
-
-        <div className="border border-border rounded-sm overflow-x-auto bg-card">
-          <table className="w-full text-sm">
-            <thead className="bg-secondary text-left">
-              <tr>
-                <th className="p-3">Name</th>
-                <th className="p-3">Category</th>
-                <th className="p-3">Price</th>
-                <th className="p-3">Featured</th>
-                <th className="p-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.id} className="border-t border-border">
-                  <td className="p-3 font-medium">{r.name}</td>
-                  <td className="p-3 capitalize text-muted-foreground">{r.category}</td>
-                  <td className="p-3">{formatKsh(r.price_ksh)}</td>
-                  <td className="p-3">{r.featured ? "✓" : "—"}</td>
-                  <td className="p-3 text-right">
-                    <button onClick={() => setEditing(r)} className="p-2 hover:text-primary"><Pencil className="w-4 h-4" /></button>
-                    <button onClick={() => remove(r.id)} className="p-2 hover:text-destructive"><Trash2 className="w-4 h-4" /></button>
-                  </td>
-                </tr>
-              ))}
-              {rows.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-muted-foreground">No products yet.</td></tr>}
-            </tbody>
-          </table>
+        <div className="border-b border-border mb-6 flex gap-1">
+          <button
+            onClick={() => setTab("products")}
+            className={`px-4 py-3 text-sm uppercase tracking-wider border-b-2 transition-colors ${tab === "products" ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+          >
+            <ShoppingBag className="w-4 h-4 inline mr-1.5" /> Products
+          </button>
+          <button
+            onClick={() => setTab("orders")}
+            className={`px-4 py-3 text-sm uppercase tracking-wider border-b-2 transition-colors ${tab === "orders" ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+          >
+            <Package className="w-4 h-4 inline mr-1.5" /> Orders
+          </button>
         </div>
+
+        {tab === "orders" ? (
+          <AdminOrders />
+        ) : (
+          <>
+            <button onClick={() => setEditing({ ...empty })} className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-sm hover:bg-accent hover:text-accent-foreground transition-smooth mb-6">
+              <Plus className="w-4 h-4" /> Add product
+            </button>
+
+            <div className="border border-border rounded-sm overflow-x-auto bg-card">
+              <table className="w-full text-sm">
+                <thead className="bg-secondary text-left">
+                  <tr>
+                    <th className="p-3">Name</th>
+                    <th className="p-3">Category</th>
+                    <th className="p-3">Price</th>
+                    <th className="p-3">Featured</th>
+                    <th className="p-3 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r) => (
+                    <tr key={r.id} className="border-t border-border">
+                      <td className="p-3 font-medium">{r.name}</td>
+                      <td className="p-3 capitalize text-muted-foreground">{r.category}</td>
+                      <td className="p-3">{formatKsh(r.price_ksh)}</td>
+                      <td className="p-3">{r.featured ? "✓" : "—"}</td>
+                      <td className="p-3 text-right">
+                        <button onClick={() => setEditing(r)} className="p-2 hover:text-primary"><Pencil className="w-4 h-4" /></button>
+                        <button onClick={() => remove(r.id)} className="p-2 hover:text-destructive"><Trash2 className="w-4 h-4" /></button>
+                      </td>
+                    </tr>
+                  ))}
+                  {rows.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-muted-foreground">No products yet.</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Editor Modal */}
