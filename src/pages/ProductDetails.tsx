@@ -15,6 +15,17 @@ export default function ProductDetails() {
   const { product, loading } = useProduct(slug);
   const [active, setActive] = useState(0);
   const [zoom, setZoom] = useState(false);
+  const [ratingSummary, setRatingSummary] = useState<{ avg: number; count: number }>({ avg: 0, count: 0 });
+
+  useEffect(() => {
+    if (!product?.id || product.id.length !== 36) return;
+    supabase.from("reviews").select("rating").eq("product_id", product.id).then(({ data }) => {
+      const list = data ?? [];
+      if (!list.length) return;
+      const avg = list.reduce((s, r) => s + (r.rating as number), 0) / list.length;
+      setRatingSummary({ avg, count: list.length });
+    });
+  }, [product?.id]);
 
   if (loading) {
     return (
