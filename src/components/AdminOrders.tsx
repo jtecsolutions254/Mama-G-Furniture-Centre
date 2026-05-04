@@ -62,8 +62,9 @@ export default function AdminOrders() {
   async function save() {
     if (!editing) return;
     try {
+      const status = statusDraft as Order["status"];
       const { error } = await supabase.from("orders").update({
-        status: statusDraft,
+        status: status as never,
         admin_notes: notes || null,
         estimated_delivery: eta || null,
       }).eq("id", editing.id);
@@ -71,7 +72,9 @@ export default function AdminOrders() {
       // log status update
       if (statusDraft !== editing.status || message.trim()) {
         await supabase.from("order_status_updates").insert({
-          order_id: editing.id, status: statusDraft, message: message || null,
+          order_id: editing.id,
+          status: status as never,
+          message: message || null,
         });
       }
       toast.success("Order updated");
