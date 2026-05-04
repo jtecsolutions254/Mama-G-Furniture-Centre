@@ -14,6 +14,145 @@ export type Database = {
   }
   public: {
     Tables: {
+      delivery_addresses: {
+        Row: {
+          area: string
+          created_at: string
+          details: string | null
+          id: string
+          is_default: boolean
+          label: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          area: string
+          created_at?: string
+          details?: string | null
+          id?: string
+          is_default?: boolean
+          label?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          area?: string
+          created_at?: string
+          details?: string | null
+          id?: string
+          is_default?: boolean
+          label?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      order_status_updates: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          order_id: string
+          status: Database["public"]["Enums"]["order_status"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          order_id: string
+          status: Database["public"]["Enums"]["order_status"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          order_id?: string
+          status?: Database["public"]["Enums"]["order_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_status_updates_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          customer_name: string
+          customer_phone: string
+          customer_whatsapp: string | null
+          delivery_area: string
+          delivery_details: string | null
+          delivery_fee_ksh: number
+          estimated_delivery: string | null
+          id: string
+          product_id: string | null
+          product_name: string
+          product_price_ksh: number
+          quantity: number
+          status: Database["public"]["Enums"]["order_status"]
+          total_ksh: number
+          tracking_code: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          customer_name: string
+          customer_phone: string
+          customer_whatsapp?: string | null
+          delivery_area: string
+          delivery_details?: string | null
+          delivery_fee_ksh?: number
+          estimated_delivery?: string | null
+          id?: string
+          product_id?: string | null
+          product_name: string
+          product_price_ksh: number
+          quantity?: number
+          status?: Database["public"]["Enums"]["order_status"]
+          total_ksh: number
+          tracking_code?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          customer_name?: string
+          customer_phone?: string
+          customer_whatsapp?: string | null
+          delivery_area?: string
+          delivery_details?: string | null
+          delivery_fee_ksh?: number
+          estimated_delivery?: string | null
+          id?: string
+          product_id?: string | null
+          product_name?: string
+          product_price_ksh?: number
+          quantity?: number
+          status?: Database["public"]["Enums"]["order_status"]
+          total_ksh?: number
+          tracking_code?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           category: Database["public"]["Enums"]["product_category"]
@@ -68,6 +207,77 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+          whatsapp: string | null
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+          whatsapp?: string | null
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          customer_name: string
+          id: string
+          product_id: string
+          rating: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          customer_name: string
+          id?: string
+          product_id: string
+          rating: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          customer_name?: string
+          id?: string
+          product_id?: string
+          rating?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -94,6 +304,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      gen_tracking_code: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -104,6 +315,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      order_status:
+        | "pending"
+        | "confirmed"
+        | "preparing"
+        | "out_for_delivery"
+        | "delivered"
+        | "cancelled"
       product_category: "sofas" | "tables"
     }
     CompositeTypes: {
@@ -233,6 +451,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      order_status: [
+        "pending",
+        "confirmed",
+        "preparing",
+        "out_for_delivery",
+        "delivered",
+        "cancelled",
+      ],
       product_category: ["sofas", "tables"],
     },
   },
