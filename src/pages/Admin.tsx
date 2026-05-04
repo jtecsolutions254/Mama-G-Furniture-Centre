@@ -50,6 +50,7 @@ export default function Admin() {
   const [session, setSession] = useState<unknown>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [checking, setChecking] = useState(true);
+  const [tab, setTab] = useState<"products" | "orders">("products");
   const [rows, setRows] = useState<Row[]>([]);
   const [editing, setEditing] = useState<Partial<Row> | null>(null);
   const [saving, setSaving] = useState(false);
