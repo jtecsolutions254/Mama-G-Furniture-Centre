@@ -95,6 +95,14 @@ export default function ProductDetails() {
           <div>
             <span className="text-xs uppercase tracking-[0.3em] text-accent">{product.category === "sofas" ? "Sofa" : "Table"}</span>
             <h1 className="font-display text-4xl md:text-5xl mt-2 leading-tight">{product.name}</h1>
+            {ratingSummary.count > 0 && (
+              <div className="flex items-center gap-2 mt-3">
+                <Stars value={ratingSummary.avg} />
+                <span className="text-sm text-muted-foreground">
+                  {ratingSummary.avg.toFixed(1)} · {ratingSummary.count} review{ratingSummary.count === 1 ? "" : "s"}
+                </span>
+              </div>
+            )}
             <div className="font-display text-3xl text-primary mt-4">{formatKsh(product.price_ksh)}</div>
 
             <p className="mt-6 text-foreground/80 leading-relaxed">{product.description}</p>
