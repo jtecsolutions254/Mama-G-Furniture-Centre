@@ -153,7 +153,7 @@ VALUES ('${(session as { user: { id: string } } | null)?.user?.id ?? "USER_ID"}'
         if (error) throw error;
         toast.success("Product updated");
       } else {
-        const { error } = await supabase.from("products").insert(payload);
+        const { error } = await supabase.from("products").insert([payload]);
         if (error) throw error;
         toast.success("Product added");
       }
