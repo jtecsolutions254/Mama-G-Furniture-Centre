@@ -142,7 +142,13 @@ VALUES ('${(session as { user: { id: string } } | null)?.user?.id ?? "USER_ID"}'
     setSaving(true);
     try {
       const payload = {
-        ...r.data,
+        name: r.data.name,
+        slug: r.data.slug,
+        category: r.data.category,
+        short_description: r.data.short_description,
+        description: r.data.description,
+        price_ksh: r.data.price_ksh,
+        featured: r.data.featured,
         size: r.data.size || null,
         dimensions: r.data.dimensions || null,
         materials: r.data.materials || null,
@@ -153,7 +159,7 @@ VALUES ('${(session as { user: { id: string } } | null)?.user?.id ?? "USER_ID"}'
         if (error) throw error;
         toast.success("Product updated");
       } else {
-        const { error } = await supabase.from("products").insert([payload]);
+        const { error } = await supabase.from("products").insert(payload);
         if (error) throw error;
         toast.success("Product added");
       }
