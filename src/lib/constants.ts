@@ -1,11 +1,18 @@
 export const BUSINESS = {
-  name: "Pamoja Living",
+  name: "MAMA G FURNITURE CENTRE",
+  shortName: "Mama G Furniture",
   tagline: "Modern Sofas & Tables Delivered Across Nairobi & Kenya",
   whatsapp: "254114234020", // +254 114 234 020
   phoneDisplay: "+254 114 234 020",
-  email: "hello@pamojaliving.co.ke",
+  email: "hello@mamagfurniture.co.ke",
   address: "Nairobi, Kenya",
 };
+
+export function whatsappNumberLink(phone: string, message: string) {
+  // phone like +254...
+  const clean = phone.replace(/\D/g, "");
+  return `https://wa.me/${clean}?text=${encodeURIComponent(message)}`;
+}
 
 export const FREE_DELIVERY_AREAS = [
   "Kilimani",
